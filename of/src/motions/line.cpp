@@ -12,6 +12,7 @@ float lateralPID(const float error) {
 
   return error * kP + derivative * kD;
 }
+
 float prevErrorAng = 0;
 float angularPID(const float error) {
   float kP = 5;
@@ -33,6 +34,14 @@ void angularPIDreset() {
 
 
 
+void moveToPose(float x, float y, float theta) {
+
+  lateralPIDreset();
+  angularPIDreset();
+
+
+
+}
 
 
 
