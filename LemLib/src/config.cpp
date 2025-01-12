@@ -26,12 +26,12 @@ double horizontal_tw_offset = 0.0;
 double vertical_tw_offset = 0.0;
 
 
-pros::MotorGroup intake_chain ({7});
+pros::MotorGroup intake_chain ({1});
 pros::MotorGroup intake_stage1({2});
 
-pros::MotorGroup lady_brown_arm ({6});
+pros::MotorGroup lady_brown_arm ({5});
 
-pros::adi::DigitalOut pneumatic_mogo_grabber('B', HIGH);
+pros::adi::DigitalOut pneumatic_mogo_grabber('A', HIGH);
 // extension arm to move corner rings
 pros::adi::DigitalOut pneumatic_robot_extension('D', LOW);
 
@@ -42,10 +42,10 @@ pros::adi::DigitalOut pneumatic_robot_extension('D', LOW);
  * SENSORS 
  * =-
  */
-pros::Imu imu(4);
+pros::Imu imu(8);
 
-pros::Rotation rotation_horizontal (9);
-pros::Rotation rotation_vertical (18);
+pros::Rotation rotation_horizontal (18);
+pros::Rotation rotation_vertical (15);
 
 
 lemlib::TrackingWheel tw_horizontal(&rotation_horizontal, t_wheel_diameter, horizontal_tw_offset);
@@ -59,9 +59,9 @@ lemlib::OdomSensors sensors(&tw_vertical, nullptr, nullptr, nullptr, &imu);
 
 
 
-pros::Rotation rotation_arm(9);
-pros::Vision vision_sensor (16);
-pros::Distance distance_sensor (17);
+pros::Rotation rotation_arm(16);
+pros::Vision vision_sensor (6);
+pros::Distance distance_sensor (7);
 /**
  * =-
  * SENSORS END 
@@ -69,8 +69,8 @@ pros::Distance distance_sensor (17);
  */
 
 
-pros::MotorGroup right_motors({12, -13, -14}, pros::MotorGearset::blue);   // left motors on ports 1, 2, 3
-pros::MotorGroup left_motors({-8, 3, 5}, pros::MotorGearset::blue); // right motors on ports 4, 5, 6
+pros::MotorGroup right_motors({-12, 13, -14}, pros::MotorGearset::blue);   // left motors on ports 1, 2, 3
+pros::MotorGroup left_motors({4, 6, -3}, pros::MotorGearset::blue); // right motors on ports 4, 5, 6
 
 
 lemlib::Drivetrain drivetrain(&left_motors, &right_motors, track_width, wheel_diatemeter, 450, 2);

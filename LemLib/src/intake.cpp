@@ -101,6 +101,7 @@ void Intake::task() {
       }
       Intake::run();
 
+      continue;
 
       pros::vision_object_s_t ring = vision_sensor.get_by_sig(0, signature_id);
     

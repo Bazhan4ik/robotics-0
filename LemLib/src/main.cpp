@@ -72,6 +72,11 @@ void opcontrol() {
     }
     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) && !running_lady_brown) {
       lb.move(4);
+      lady_brown_arm.move(127);
+    } else {
+      if(max_speed == 0) {
+        lady_brown_arm.brake();
+      }
     }
     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
       lb.move(0);

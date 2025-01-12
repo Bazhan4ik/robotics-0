@@ -1,7 +1,7 @@
 #include "pros/rtos.hpp"
 
 
-
+extern int max_speed;
 
 class LadyBrown {
 

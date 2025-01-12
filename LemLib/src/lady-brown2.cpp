@@ -16,17 +16,19 @@ int max_speed = 80;
 void LadyBrown::move(int position) {
   if(position == 1) {
     max_speed = 50;
-    current_target = 2600;
+    current_target = 4300;
   } else if(position == 2) {
     max_speed = 50;
     current_target = 6000;
   } else if(position == 3) {
     current_target = 12000;
   } else if(position == 4) {
-    max_speed = 80;
-    current_target = 15000;
+    // max_speed = 80;
+    max_speed = 0;
+    current_target = 18000;
   } else if(position == 0) {
     current_target = 0;
+    max_speed = 80;
   }
 
   timer = pros::millis();
@@ -67,7 +69,7 @@ void LadyBrown::init() {
     while(true) {
       pros::delay(20);
 
-      if(finished) {
+      if(finished || max_speed == 0) {
         timer = pros::millis();
         continue;
       }
