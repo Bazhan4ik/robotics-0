@@ -8,6 +8,8 @@
 
 
 int intake_speed = 127;
+int stop_after;
+int intake_timer;
 
 Intake intake;
 
@@ -77,8 +79,14 @@ void Intake::stop() {
   auto_wheels = false;
 }
 void Intake::reverse() {
+  intake_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake_chain.move(-intake_speed);
   intake_stage1.move(intake_speed);
+}
+void Intake::run_time(int time) {
+  auto_run = true;
+  stop_after = time;
+  intake_timer = pros::millis();
 }
 
 void Intake::task() {
@@ -86,8 +94,11 @@ void Intake::task() {
 
   int ring_not_seen = 0;
 
+  optical_sensor.set_integration_time(20);
+  optical_sensor.set_led_pwm(100);
+
   while(true) {
-    pros::delay(20);
+    pros::delay(15);
 
     if(auto_wheels) {
       Intake::run_wheels();
@@ -95,40 +106,33 @@ void Intake::task() {
     }
 
     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) || auto_run) {
+      if(stop_after && intake_timer + stop_after < pros::millis()) {
+        Intake::stop();
+        continue;
+      }
       if(auto_reverse) {
         Intake::reverse();
         continue;
       }
       Intake::run();
 
-      continue;
+      double hue = optical_sensor.get_hue();
+      int proximity = optical_sensor.get_proximity();
 
-      pros::vision_object_s_t ring = vision_sensor.get_by_sig(0, signature_id);
-    
-      AnalyzedRing ring_analysis = analyze_ring(ring, 105);
-      if(ring_analysis.faultyRing) {
-        use_sorting = false;
-      }
+      master.set_text(1, 1, "SENSOR: " + std::to_string(optical_sensor.get_hue()) + "     ");
+      // master.set_text(1, 1, "SENSOR: " + std::to_string(hue));
 
-      if(ring_analysis.valid) {
-
-        ring_not_seen = 0;
-        throw_ring = true;
-      } else {
-        ring_not_seen++;
-
-        if(throw_ring && ring_not_seen >= 5) {
-          intake_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-          Intake::stop();
-          pros::delay(500);
-          Intake::run();
-
-
-          throw_ring = false;
-          ring_not_seen = 0;
-        }
-      }
       
+
+      if(false && proximity > 200 && hue > 330.0 && hue < 370.0) {
+        pros::delay(30);
+        // master.set_text(1, 1, "+++ SENSOR: " + std::to_string(optical_sensor.get_hue()) + "    ");
+        intake_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        intake_chain.brake();
+        pros::delay(200);
+        intake_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+      }
+
     } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) || auto_reverse) {
       Intake::reverse();
     } else {

@@ -1,16 +1,33 @@
+#include "pros/rtos.hpp"
 
 
+extern int max_speed;
+
+class LadyBrown {
+
+public:
+
+  void move(int position);
+
+  void reset();
+
+  void init();
+
+  bool isFinished();
+
+  void waitUntilDone();
+
+  int current_target;
+
+private:
+  int current_position;
+
+  bool finished;
+
+  pros::Task* task;
+};
 
 
-extern bool lady_brown_allowed;
-extern bool running_lady_brown;
+extern LadyBrown lb;
 
 
-extern int lb_dist_1;
-extern int lb_dist_2;
-
-extern void lb_take_of();
-
-extern void lb_get_ready(int target);
-extern void lb_move_down();
-extern void lb_move_up();

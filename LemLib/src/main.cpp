@@ -47,13 +47,14 @@ void competition_initialize() {}
 
 
 void autonomous() {
-  // autoRedTwoRings();
-  // autoNegativeElims();
+
   
   skills();
 }
 
 void opcontrol() {
+
+  intake_speed = 127;
 
   while (true) {
     int leftY = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -64,22 +65,27 @@ void opcontrol() {
 
     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
       mogo_ungrab();
+      grab = false;
+    } else {
+      grab = true;
     }
 
     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) || master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
       lb.move(1);
       // pros::Task my_task(lb_get_ready, "My Task Name");
     }
+    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+      lb.move(0);
+    }
     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) && !running_lady_brown) {
+      intake.reverse();
       lb.move(4);
       lady_brown_arm.move(127);
     } else {
-      if(max_speed == 0) {
+      if(lb.isFinished() && lb.current_target == 18000) {
+        lady_brown_arm.set_brake_mode(MOTOR_BRAKE_COAST);
         lady_brown_arm.brake();
       }
-    }
-    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
-      lb.move(0);
     }
 
 

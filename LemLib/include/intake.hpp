@@ -39,6 +39,8 @@ public:
 
   static void task();
   static void run_auto_reverse();
+
+  static void run_time(int time);
   
 };
 

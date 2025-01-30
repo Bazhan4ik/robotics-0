@@ -4,8 +4,8 @@
 #include "lemlib/api.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/distance.hpp"
-#include "pros/vision.h"
-#include "pros/vision.hpp"
+#include "pros/optical.h"
+#include "pros/optical.hpp"
 
 #define RED_SIGNATURE 1
 
@@ -41,7 +41,7 @@ extern lemlib::OdomSensors sensors;
 
 
 extern pros::Rotation rotation_arm;
-extern pros::Vision vision_sensor;
+extern pros::Optical optical_sensor;
 extern pros::Distance distance_sensor;
 
 
@@ -72,8 +72,6 @@ extern lemlib::Chassis chassis;
 extern pros::Controller master;
 
 
-
-extern pros::vision_signature_s_t RED_SIG;
 
 
 
